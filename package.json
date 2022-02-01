@@ -5,5 +5,15 @@
   "main": "index.js",
   "repository": "https://github.com/baparham/electron-dependencies.git",
   "author": "Brad Parham <baparham@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "listversions": "node index.js",
+    "update": "yarn add electron-releases"
+  },
+  "dependencies": {
+    "electron-releases": "^3.937.0",
+    "https-proxy-agent": "^5.0.0",
+    "js-yaml": "^4.1.0",
+    "minimist": "^1.2.5"
+  }
 }
