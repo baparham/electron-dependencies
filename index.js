@@ -6,6 +6,8 @@ const { join } = require('path');
 const url = require('url');
 const { spawnSync } = require('child_process');
 var argv = require('minimist')(process.argv.slice(2));
+const verbose = !!argv.verbose || false;
+const toYaml = !!argv.yaml || false;
 
 const initialPyContent = `# This section of the file has been added by electron-dependencies
 # Helper function to process strings
@@ -74,6 +76,13 @@ const componentRepos = {
     versionRegEx: semverPattern,
     useRegExMatchNumber: 0,
   },
+  'libvpx': {
+    key: 'src/third_party/libvpx/source/libvpx',
+    useShaVersion: false,
+    fileWithVersionData: 'CHANGELOG',
+    versionRegEx: semverPattern,
+    useRegExMatchNumber: 0,
+  },
   // 'ioswebkit': 'src/ios/third_party/webkit/src',
 };
 
@@ -99,6 +108,12 @@ let chromiumUrl;
 
 let dependencies = {};
 
+function debugLog(...msgs) {
+  if (verbose) {
+    console.log(...msgs);
+  }
+}
+
 function getChromeVersion(release) {
   const chromeVersion = release.deps.chrome;
   if (!chromeVersion) {
@@ -108,6 +123,7 @@ function getChromeVersion(release) {
 }
 
 function getRelease(tag) {
+  debugLog('Finding electron release with tag', `v${tag}`);
   const release = releases.find(release => release.tag_name === `v${tag}`);
 
   if (release === undefined) {
@@ -133,7 +149,7 @@ function getTagFromArg() {
 }
 
 function downloadFile(fileUrl, localFilename, fileOptions) {
-  // console.log('Downloading', fileUrl);
+  debugLog('Downloading', fileUrl);
   const localWriteStream = fs.createWriteStream(localFilename, fileOptions);
   return downloadToStream(fileUrl, localWriteStream);
 }
@@ -228,7 +244,7 @@ function decodeBase64(input) {
   return Buffer.from(input, 'base64').toString('utf-8');
 }
 
-async function addComponentVersions(readmeFile, suffix, component, indent=2) {
+async function addComponentVersions(readmeFile, suffix, component, indent = 2) {
   if (readmeFile.endsWith(`README.${suffix}`)) {
     let { cpeVersion, version } = await getVersionsFromChromiumFile(readmeFile);
     component.version = version;
@@ -255,17 +271,43 @@ async function getVersionsFromChromiumFile(value) {
   return { cpeVersion, version };
 }
 
-function getVersionString(name, depTree, indent=0) {
-  let returnString = '';
-  if (typeof depTree === 'string') {
-    returnString += `${' '.repeat(indent)}${name}: ${depTree}\n`;
-  } else if (depTree.version) {
-    returnString += `${' '.repeat(indent)}${name}: ${depTree.version}${depTree.cpeVersion ? ' or ' + depTree.cpeVersion : ''}\n`;
+function wrapWithChar(stringToWrap, wrapChar) {
+  return `${wrapChar}${stringToWrap}${wrapChar}`;
+}
+
+function useBestVersion(versions) {
+  for (const version of versions) {
+    if (new RegExp('^' + semverPattern.source + '$').exec(version)) {
+      return version;
+    }
   }
+  return versions[0];
+}
+
+function getSingleVersionItemString(depTree, returnString, indent, name, quoteChar, useYamlNotation) {
+  const nameString = `${name}`;
+  let versionString = `${wrapWithChar(depTree, quoteChar)}`;
+
+  if (typeof depTree !== 'string') {
+    versionString = `${useBestVersion([depTree.version, depTree.cpeVersion])}`;
+    versionString = wrapWithChar(versionString, quoteChar);
+  }
+  let versionText = ` ${versionString}`;
+  if (useYamlNotation) {
+    versionText = `\n${' '.repeat(indent + 2)}- version: ${versionString}`;
+  }
+  returnString += `${' '.repeat(indent)}${nameString}:${versionText}\n`;
+
+  return returnString;
+}
+
+function getVersionString(name, depTree, quoteChar = '', indent = 0, autoIndent = true, useYamlNotation = false) {
+  let returnString = getSingleVersionItemString(depTree, '', indent, name, quoteChar, useYamlNotation);
   const subDependencies = depTree.deps;
   if (subDependencies) {
     for (const depName of Object.keys(subDependencies)) {
-      returnString += getVersionString(depName, subDependencies[depName], indent + 2)
+      const useIndent = autoIndent ? indent + 2 : indent;
+      returnString += getVersionString(depName, subDependencies[depName], quoteChar, useIndent, autoIndent, useYamlNotation);
     }
   }
   return returnString;
@@ -274,6 +316,12 @@ function getVersionString(name, depTree, indent=0) {
 function getDepSummary(deps) {
   let retString = 'Dependency Summary\n';
   retString += getVersionString('electron', deps) + '\n';
+  return retString;
+}
+
+function getYamlSummary(deps) {
+  let retString = 'versions:\n';
+  retString += getVersionString('electron', deps, '"', 2, false, true);
   return retString;
 }
 
@@ -307,7 +355,7 @@ async function main() {
     },
   };
 
-  // console.log('Chromium URL', chromiumUrl);
+  debugLog('Chromium URL', chromiumUrl);
   const chromiumGitHubBaseUrl = `https://raw.githubusercontent.com/chromium/chromium/${chromiumVersion}/`;
   const chromiumDepsFile = `${chromiumGitHubBaseUrl}DEPS`;
 
@@ -317,9 +365,9 @@ async function main() {
   await downloadFile(chromiumDepsFile, localDepsFilename, { flags: 'a' });
 
   // use python script to dump to json
-  const proc = spawnSync('python3 dump_deps.py', {shell: true});
+  const proc = spawnSync('python3 dump_deps.py', { shell: true });
   if (proc.error) {
-    console.log(proc.output.toString());
+    console.error(proc.output.toString());
     process.exit(3);
   }
 
@@ -327,16 +375,15 @@ async function main() {
   chromiumDependencyMap = JSON.parse(fs.readFileSync(join(__dirname, 'chromium_deps.json')));
 
   // get more data for specific deps
-  // console.log(release.deps);
-  // console.log('Node.js deps page:', `https://github.com/nodejs/node/tree/v${release.deps['node']}/deps`);
+  debugLog('Node.js deps page:', `https://github.com/nodejs/node/tree/v${release.deps['node']}/deps`);
 
-  // console.log('\nThird party component repos:');
+  debugLog('\nThird party component repos:');
   // iterate and show links to any defined component
   for (const comp of Object.keys(componentRepos)) {
-    // console.log(comp);
+    debugLog(comp);
     const repo = getComponentRepoUrl(comp);
     const compData = getComponentData(comp);
-    // console.log(' ', repo);
+    debugLog(' ', repo);
     dependencies.deps.chromium.deps[comp] = {
       url: repo,
       version: '',
@@ -365,6 +412,7 @@ async function main() {
       const pdfiumComps = {
         'libtiff': 'third_party/libtiff/README.pdfium',
         'libopenjpeg20': 'third_party/libopenjpeg20/README.pdfium',
+        'libpng16': 'third_party/libpng16/README.pdfium',
       };
       for (const pdfiumComp of Object.keys(pdfiumComps)) {
         const readmeFile = repo + '/' + pdfiumComps[pdfiumComp];
@@ -374,13 +422,13 @@ async function main() {
           cpeVersion: '',
         };
 
-        // console.log(' ', pdfiumComp);
+        debugLog(' ', pdfiumComp);
         await addComponentVersions(readmeFile, 'pdfium', dependencies.deps.chromium.deps[comp].deps[pdfiumComp], 4);
       }
     }
   }
 
-  // console.log('\nChromium specific components:');
+  debugLog('\nChromium specific components:');
   // iterate over chromium components
   for (const comp of Object.keys(chromiumComponents)) {
     const value = getChromiumComponent(comp);
@@ -389,13 +437,17 @@ async function main() {
       version: '',
       cpeVersion: '',
     };
-    // console.log(comp);
-    // console.log('  reading file:', value);
+    debugLog(comp);
+    debugLog('  reading file:', value);
     await addComponentVersions(value, 'chromium', dependencies.deps.chromium.deps[comp]);
   }
 
-  // console.log(JSON.stringify(dependencies, null, 2));
-  console.log(getDepSummary(dependencies));
+  debugLog(JSON.stringify(dependencies, null, 2));
+  if (toYaml) {
+    console.log(getYamlSummary(dependencies));
+  } else {
+    console.log(getDepSummary(dependencies));
+  }
 }
 
 main();

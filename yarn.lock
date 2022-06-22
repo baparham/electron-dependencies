@@ -37,17 +37,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "electron-dependencies@workspace:."
   dependencies:
-    electron-releases: ^3.939.0
+    electron-releases: ^3.1045.0
     https-proxy-agent: ^5.0.0
     js-yaml: ^4.1.0
     minimist: ^1.2.5
   languageName: unknown
   linkType: soft
 
-"electron-releases@npm:^3.939.0":
-  version: 3.939.0
-  resolution: "electron-releases@npm:3.939.0"
-  checksum: baff5e4d830a1845fe3de3e2c151df64f9a0d7e0aba67d9a51fc2081486e050db8cbcf74a477cbaedcc446c314863fb593eed90c8e24be7e3df1add604d0b9ee
+"electron-releases@npm:^3.1045.0":
+  version: 3.1045.0
+  resolution: "electron-releases@npm:3.1045.0"
+  checksum: 48788159cb01e193533801cae541c13e609e0b80c454f0b07d9f5611e42d62b01f68b0fb0e05bcad4feacd88a9e460ca6c3d4359a73ef563ae632e32f82e6971
   languageName: node
   linkType: hard
 
