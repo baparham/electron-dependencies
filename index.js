@@ -325,6 +325,14 @@ function getYamlSummary(deps) {
   return retString;
 }
 
+function printSummary() {
+  if (toYaml) {
+    console.log(getYamlSummary(dependencies));
+  } else {
+    console.log(getDepSummary(dependencies));
+  }
+}
+
 async function main() {
   checkArgs();
 
@@ -441,13 +449,9 @@ async function main() {
     debugLog('  reading file:', value);
     await addComponentVersions(value, 'chromium', dependencies.deps.chromium.deps[comp]);
   }
-
   debugLog(JSON.stringify(dependencies, null, 2));
-  if (toYaml) {
-    console.log(getYamlSummary(dependencies));
-  } else {
-    console.log(getDepSummary(dependencies));
-  }
+
+  printSummary();
 }
 
 main();
