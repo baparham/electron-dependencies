@@ -5,6 +5,7 @@ const releases = require('electron-releases');
 const { join } = require('path');
 const url = require('url');
 const { spawnSync } = require('child_process');
+
 var argv = require('minimist')(process.argv.slice(2));
 const verbose = !!argv.verbose || false;
 const toYaml = !!argv.yaml || false;
@@ -83,7 +84,13 @@ const componentRepos = {
     versionRegEx: semverPattern,
     useRegExMatchNumber: 0,
   },
-  // 'ioswebkit': 'src/ios/third_party/webkit/src',
+  'wayland': {
+    key: 'src/third_party/wayland/src',
+    useShaVersion: false,
+    fileWithVersionData: 'meson.build',
+    versionRegEx: semverPattern,
+    useRegExMatchNumber: 0,
+  },
 };
 
 const chromiumComponents = {
