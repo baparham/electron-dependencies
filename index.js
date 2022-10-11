@@ -340,6 +340,24 @@ function printSummary() {
   }
 }
 
+function getPdfiumComponents(chromiumVersion) {
+  let libOpenJpeg = {
+    'libopenjpeg': 'third_party/libopenjpeg/README.pdfium',
+  };
+  // pdfium uses libopenjpeg20 in versions included prior to chromium 105
+  if (chromiumVersion && Number(chromiumVersion.split('.')[0]) < 105) {
+    libOpenJpeg = {
+      'libopenjpeg20': 'third_party/libopenjpeg20/README.pdfium',
+    };
+  }
+  const pdfiumComps = {
+    'libtiff': 'third_party/libtiff/README.pdfium',
+    'libpng16': 'third_party/libpng16/README.pdfium',
+    ...libOpenJpeg,
+  };
+  return pdfiumComps;
+}
+
 async function main() {
   checkArgs();
 
@@ -424,11 +442,7 @@ async function main() {
     }
 
     if (comp === 'pdfium') {
-      const pdfiumComps = {
-        'libtiff': 'third_party/libtiff/README.pdfium',
-        'libopenjpeg20': 'third_party/libopenjpeg20/README.pdfium',
-        'libpng16': 'third_party/libpng16/README.pdfium',
-      };
+      const pdfiumComps = getPdfiumComponents(dependencies.deps.chromium.version);
       for (const pdfiumComp of Object.keys(pdfiumComps)) {
         const readmeFile = repo + '/' + pdfiumComps[pdfiumComp];
         dependencies.deps.chromium.deps[comp].deps[pdfiumComp] = {
