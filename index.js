@@ -401,7 +401,7 @@ async function main() {
   await downloadFile(chromiumDepsFile, localDepsFilename, { flags: 'a' });
 
   // use python script to dump to json
-  const proc = spawnSync('python3 dump_deps.py', { shell: true });
+  const proc = spawnSync('python dump_deps.py', { shell: true });
   if (proc.error) {
     console.error(proc.output.toString());
     process.exit(3);
