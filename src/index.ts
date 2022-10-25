@@ -1,12 +1,13 @@
-const fs = require('fs');
-const https = require('https');
-const HttpsProxyAgent = require('https-proxy-agent');
-const releases = require('electron-releases');
-const { join } = require('path');
-const url = require('url');
-const { spawnSync } = require('child_process');
-const nodeReleases = require('process-versions');
+import * as fs from 'fs';
+import * as https from 'https';
+import HttpsProxyAgent from 'https-proxy-agent';
+import { join } from 'path';
+import { spawnSync } from 'child_process';
+import { StreamOptions } from 'stream';
 
+const nodeReleases = require('node-dependencies');
+
+const releases: Releases = require('electron-releases');
 var argv = require('minimist')(process.argv.slice(2));
 const verbose = !!argv.verbose || false;
 const toYaml = !!argv.yaml || false;
@@ -30,7 +31,22 @@ const semverPattern =
 const lenientVersionPattern = /([\d]+(?:\.[a-zA-Z0-9-]+)?(?:\.[a-zA-Z0-9-]+\.?)?)/;
 const shaPattern = /([A-Fa-f0-9]{40})/;
 
-const componentRepos = {
+interface ShaVersionedComponent {
+  key: string,
+  useShaVersion: true,
+}
+
+interface VersionedComponent {
+  key: string,
+  useShaVersion: false,
+  fileWithVersionData: string,
+  versionRegEx: RegExp,
+  useRegExMatchNumber: number,
+}
+
+type ComponentRepoMap = { [id: string]: ShaVersionedComponent | VersionedComponent };
+
+const componentRepos: ComponentRepoMap = {
   'freetype': {
     key: 'src/third_party/freetype/src',
     useShaVersion: false,
@@ -94,7 +110,10 @@ const componentRepos = {
   },
 };
 
-const chromiumComponents = {
+type ChromiumComponent = 'libxml2' | 'sqlite' | 'libxslt' | 'libwebp' | 'opus';
+
+
+const chromiumComponents: { [id in ChromiumComponent]: string } = {
   'libxml2': 'third_party/libxml/README.chromium',
   'sqlite': 'third_party/sqlite/README.chromium',
   'libxslt': 'third_party/libxslt/README.chromium',
@@ -111,18 +130,75 @@ const nodeComps = {
   'nghttp2': 'deps/nghttp2',
 };
 
-let chromiumDependencyMap;
-let chromiumUrl;
+let chromiumDependencyMap: any;
+let chromiumUrl: string = '';
 
-let dependencies = {};
+type Dependency = {
+  version: string,
+  cpeVersion?: string,
+  url?: string,
+  versionFile?: string,
+  deps?: {
+    [id: string]: Dependency | string
+  },
+};
 
-function debugLog(...msgs) {
+type NodeDependency = Dependency | {
+  originalDeps: {
+    node: string,
+    v8: string,
+    uv: string,
+    zlib: string,
+    brotli: string,
+    ares: string,
+    modules: string,
+    nghttp2: string,
+    napi: string,
+    llhttp: string,
+    openssl: string,
+    cldr: string,
+    icu: string,
+    tz: string,
+    unicode: string,
+    ngtcp2: string,
+    nghttp3: string
+  }
+}
+
+interface TopLevelDependency extends Dependency {
+  version: string,
+  deps: {
+    chromium: Dependency,
+    node: Dependency,
+  },
+};
+
+type Release = {
+  deps: {
+    version: string,
+    chrome: string,
+    node: string,
+    date: string,
+    v8: string,
+    uv: string,
+    zlib: string,
+    openssl: string,
+    modules: string,
+  },
+  tag_name: string,
+};
+
+type Releases = Array<Release>;
+
+let dependencies: TopLevelDependency;
+
+function debugLog(...msgs: any[]) {
   if (verbose) {
     console.log(...msgs);
   }
 }
 
-function getChromeVersion(release) {
+function getChromeVersion(release: Release) {
   const chromeVersion = release.deps.chrome;
   if (!chromeVersion) {
     throw 'Chrome version not detected';
@@ -130,7 +206,7 @@ function getChromeVersion(release) {
   return chromeVersion;
 }
 
-function getRelease(tag) {
+function getRelease(tag: string) {
   debugLog('Finding electron release with tag', `v${tag}`);
   const release = releases.find(release => release.tag_name === `v${tag}`);
 
@@ -156,15 +232,15 @@ function getTagFromArg() {
   return tag;
 }
 
-function downloadFile(fileUrl, localFilename, fileOptions) {
+function downloadFile(fileUrl: string, localFilename: string, fileOptions: StreamOptions<fs.WriteStream>) {
   debugLog('Downloading', fileUrl);
   const localWriteStream = fs.createWriteStream(localFilename, fileOptions);
   return downloadToStream(fileUrl, localWriteStream);
 }
 
-function downloadToStream(fileUrl, localWriteStream) {
+function downloadToStream(fileUrl: string, localWriteStream: fs.WriteStream) {
   return new Promise((resolve, reject) => {
-    const options = url.parse(fileUrl);
+    const options: https.RequestOptions = new URL(fileUrl);
     if (process.env.https_proxy) {
       const proxyAgent = HttpsProxyAgent(process.env.https_proxy);
       options.agent = proxyAgent;
@@ -181,10 +257,10 @@ function downloadToStream(fileUrl, localWriteStream) {
 }
 
 // TODO refactor this to use common code with downloadToStream
-function downloadToString(fileUrl) {
-  const bufferArray = [];
+function downloadToString(fileUrl: string): Promise<string> {
+  const bufferArray: Array<Buffer> = [];
   return new Promise((resolve, reject) => {
-    const options = url.parse(fileUrl);
+    const options: https.RequestOptions = new URL(fileUrl);
     if (process.env.https_proxy) {
       const proxyAgent = HttpsProxyAgent(process.env.https_proxy);
       options.agent = proxyAgent;
@@ -202,11 +278,11 @@ function downloadToString(fileUrl) {
   });
 }
 
-function getRawComponentData(comp) {
+function getRawComponentData(comp: string): VersionedComponent | ShaVersionedComponent | undefined {
   return componentRepos[comp];
 }
 
-function getComponentRawUrlSuffix(comp) {
+function getComponentRawUrlSuffix(comp: string) {
   const componentData = getRawComponentData(comp);
   if (typeof componentData === 'object') {
     return chromiumDependencyMap[componentData.key];
@@ -217,7 +293,7 @@ function getComponentRawUrlSuffix(comp) {
   }
 }
 
-function getComponentRepoUrl(comp) {
+function getComponentRepoUrl(comp: string) {
   const rawRepo = getComponentRawUrlSuffix(comp);
   if (rawRepo.url) {
     return rawRepo.url.replace('@', '/+/');
@@ -225,42 +301,46 @@ function getComponentRepoUrl(comp) {
   return rawRepo.replace('@', '/+/');
 }
 
-function getComponentData(comp) {
+function getComponentData(comp: string) {
   const compData = getRawComponentData(comp);
-  const returnData = {
-    url: '',
-    useShaVersion: true,
-    fileWithVersionData: undefined,
-    versionRegEx: undefined,
-    useRegExMatchNumber: undefined,
-  };
-  returnData.url = getComponentRepoUrl(comp);
-  if (typeof compData === 'object') {
-    returnData.useShaVersion = compData.useShaVersion;
-    returnData.fileWithVersionData = returnData.url + '/' + compData.fileWithVersionData;
-    returnData.versionRegEx = compData.versionRegEx;
-    returnData.useRegExMatchNumber = compData.useRegExMatchNumber;
+  const compUrl = getComponentRepoUrl(comp);
+  if (compData !== undefined) {
+    if (!compData.useShaVersion) {
+      compData.fileWithVersionData = compUrl + '/' + compData.fileWithVersionData;
+    }
+    return {
+      url: compUrl,
+      ...compData,
+    };
+  } else {
+    return {
+      url: compUrl,
+      useShaVersion: true,
+    };
   }
-  return returnData;
 }
 
-function getChromiumComponent(comp) {
+function getChromiumComponent(comp: ChromiumComponent) {
   return chromiumUrl + chromiumComponents[comp];
 }
 
-function decodeBase64(input) {
+function decodeBase64(input: string) {
   return Buffer.from(input, 'base64').toString('utf-8');
 }
 
-async function addComponentVersions(readmeFile, suffix, component, indent = 2) {
+async function addComponentVersions(readmeFile: string, suffix: string, component: Dependency, indent = 2) {
   if (readmeFile.endsWith(`README.${suffix}`)) {
     let { cpeVersion, version } = await getVersionsFromChromiumFile(readmeFile);
-    component.version = version;
-    component.cpeVersion = cpeVersion;
+    if (version !== undefined) {
+      component.version = version;
+    }
+    if (cpeVersion !== undefined) {
+      component.cpeVersion = cpeVersion;
+    }
   }
 }
 
-async function getVersionsFromChromiumFile(value) {
+async function getVersionsFromChromiumFile(value: string) {
   const base64String = await downloadToString(value + '?format=TEXT');
   const fileContent = decodeBase64(base64String);
 
@@ -279,11 +359,11 @@ async function getVersionsFromChromiumFile(value) {
   return { cpeVersion, version };
 }
 
-function wrapWithChar(stringToWrap, wrapChar) {
+function wrapWithChar(stringToWrap: string, wrapChar: string) {
   return `${wrapChar}${stringToWrap}${wrapChar}`;
 }
 
-function useBestVersion(versions) {
+function useBestVersion(versions: Array<string>) {
   for (const version of versions) {
     if (new RegExp('^' + semverPattern.source + '$').exec(version)) {
       return version;
@@ -292,7 +372,7 @@ function useBestVersion(versions) {
   return versions[0];
 }
 
-function getSingleVersionItemString(depTree, returnString, indent, name, quoteChar, useYamlNotation) {
+function getSingleVersionItemString(depTree: Dependency, returnString, indent, name, quoteChar, useYamlNotation) {
   const nameString = `${name}`;
   let versionString = `${wrapWithChar(depTree, quoteChar)}`;
 
@@ -342,7 +422,7 @@ function printSummary() {
 }
 
 function getPdfiumComponents(chromiumVersion) {
-  let libOpenJpeg = {
+  let libOpenJpeg: { [id: string]: string } = {
     'libopenjpeg': 'third_party/libopenjpeg/README.pdfium',
   };
   // pdfium uses libopenjpeg20 in versions included prior to chromium 105
@@ -380,13 +460,12 @@ async function main() {
         version: release.deps.node,
         url: `https://github.com/nodejs/node/tree/v${release.deps['node']}/deps`,
         deps: {
-          ...nodeReleases[release.deps.node],
-          // Electron specific overrides deviating from upstream Node.js versions
           'v8': release.deps.v8,
           'uv': release.deps.uv,
           'zlib': release.deps.zlib,
           'openssl': release.deps.openssl,
         },
+        originalDeps: nodeReleases[release.deps.node]
       },
     },
   };
@@ -408,7 +487,7 @@ async function main() {
   }
 
   // import json file here
-  chromiumDependencyMap = JSON.parse(fs.readFileSync(join(__dirname, 'chromium_deps.json')));
+  chromiumDependencyMap = JSON.parse(fs.readFileSync(join(__dirname, 'chromium_deps.json')).toString());
 
   // get more data for specific deps
   debugLog('Node.js deps page:', `https://github.com/nodejs/node/tree/v${release.deps['node']}/deps`);
@@ -420,7 +499,7 @@ async function main() {
     const repo = getComponentRepoUrl(comp);
     const compData = getComponentData(comp);
     debugLog(' ', repo);
-    dependencies.deps.chromium.deps[comp] = {
+    let currentComponent: Dependency = {
       url: repo,
       version: '',
       deps: {},
@@ -430,17 +509,17 @@ async function main() {
       const regex = new RegExp(shaPattern);
       const shaMatches = regex.exec(repo);
       if (shaMatches && shaMatches.length) {
-        dependencies.deps.chromium.deps[comp].version = shaMatches[0];
+        currentComponent.version = shaMatches[0];
       }
     } else if (compData.fileWithVersionData !== undefined) {
       // We can try and get the version from a readme or similar file
-      dependencies.deps.chromium.deps[comp].versionFile = compData.fileWithVersionData;
+      currentComponent.versionFile = compData.fileWithVersionData;
       const base64String = await downloadToString(compData.fileWithVersionData + '?format=TEXT');
       const fileContent = decodeBase64(base64String);
       const regEx = new RegExp(compData.versionRegEx, 'i');
       const versionMatches = regEx.exec(fileContent);
       if (versionMatches && versionMatches.length) {
-        dependencies.deps.chromium.deps[comp].version = versionMatches[compData.useRegExMatchNumber];
+        currentComponent.version = versionMatches[compData.useRegExMatchNumber];
       }
     }
 
@@ -448,16 +527,17 @@ async function main() {
       const pdfiumComps = getPdfiumComponents(dependencies.deps.chromium.version);
       for (const pdfiumComp of Object.keys(pdfiumComps)) {
         const readmeFile = repo + '/' + pdfiumComps[pdfiumComp];
-        dependencies.deps.chromium.deps[comp].deps[pdfiumComp] = {
+        currentComponent.deps[pdfiumComp] = {
           url: readmeFile,
           version: '',
           cpeVersion: '',
         };
 
         debugLog(' ', pdfiumComp);
-        await addComponentVersions(readmeFile, 'pdfium', dependencies.deps.chromium.deps[comp].deps[pdfiumComp], 4);
+        await addComponentVersions(readmeFile, 'pdfium', currentComponent.deps[pdfiumComp], 4);
       }
     }
+    dependencies.deps.chromium.deps[comp] = currentComponent;
   }
 
   debugLog('\nChromium specific components:');
