@@ -11,10 +11,10 @@ describe('Download tests', () => {
     );
   });
 
-  it('should download DEPS file for chromium version', () => {
+  it('should download DEPS file for chromium version', async () => {
     const tag = '108.0.5329.0';
     const localFile = join(__dirname, 'logs', 'local_chromium_deps');
-    downloadFile(getChromiumDepsFilename(tag), localFile);
+    await downloadFile(getChromiumDepsFilename(tag), localFile);
     const fileContent = readFileSync(localFile).toString();
     const expectedStrings = [
       'vars =',
