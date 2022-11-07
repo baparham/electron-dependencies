@@ -12,11 +12,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "electron-releases": "^3.1171.0",
+    "electron-releases": "https://github.com/electron/releases/archive/refs/tags/v3.1191.0.tar.gz",
     "https-proxy-agent": "^5.0.0",
     "js-yaml": "^4.1.0",
     "minimist": "^1.2.5",
-    "process-versions": "^0.2.1"
+    "process-versions": "^0.2.4"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
