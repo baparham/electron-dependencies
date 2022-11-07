@@ -7,7 +7,7 @@
   "author": "Brad Parham <baparham@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "listversions": "yarn update >/dev/null && node index.js",
+    "listversions": "node index.js",
     "update": "yarn add electron-releases",
     "test": "jest"
   },
