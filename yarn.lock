@@ -1457,7 +1457,7 @@ __metadata:
     "@tsconfig/recommended": ^1.0.1
     "@types/jest": ^29.2.0
     "@types/node": ^18.8.4
-    electron-releases: "https://github.com/electron/releases/archive/refs/tags/v3.1191.0.tar.gz"
+    electron-releases: "https://github.com/electron/releases/archive/refs/tags/v3.1199.0.tar.gz"
     https-proxy-agent: ^5.0.0
     jest: ^29.2.2
     js-yaml: ^4.1.0
@@ -1468,10 +1468,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"electron-releases@https://github.com/electron/releases/archive/refs/tags/v3.1191.0.tar.gz":
-  version: 3.1191.0
-  resolution: "electron-releases@https://github.com/electron/releases/archive/refs/tags/v3.1191.0.tar.gz"
-  checksum: 5ef6b945017d2e5472cccbadece0c7055596eb9e2366698e8c2133a811d29f7a66232199f9931bd1413cf6c326eff89169c13bc7d6d58bcd925a61d7fceab6fe
+"electron-releases@https://github.com/electron/releases/archive/refs/tags/v3.1199.0.tar.gz":
+  version: 3.1199.0
+  resolution: "electron-releases@https://github.com/electron/releases/archive/refs/tags/v3.1199.0.tar.gz"
+  checksum: b0a965d7ddcfaacb05ac1e0ebed85395bea508f53f6f41402341f42f17bee5e206088ca613c900c433f291f185b1b823e6eddb439ebff9529efc1f82ad029742
   languageName: node
   linkType: hard
 
