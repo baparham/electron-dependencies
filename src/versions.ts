@@ -1,5 +1,6 @@
 import electronReleases from 'electron-releases/lite.json';
 import { getComponentConfig } from './component-data';
+import { decodeBase64, downloadToString } from './download';
 import { shaPattern } from './regex-patterns';
 import { getComponentUrl } from './url-functions';
 
@@ -39,6 +40,13 @@ export async function getComponentVersion(component: string, chromiumTag: string
   } else {
     const fileVersionUrl = compUrl + '/' + componentConfig.fileWithVersionData;
     // TODO add file with version download here and version parsing
+    const base64String = await downloadToString(componentConfig.fileWithVersionData + '?format=TEXT');
+    const fileContent = decodeBase64(base64String);
+    const regEx = new RegExp(componentConfig.versionRegEx, 'i');
+    const versionMatches = regEx.exec(fileContent);
+    if (versionMatches && versionMatches.length) {
+      return versionMatches[componentConfig.useRegExMatchNumber];
+    }
   }
   return '';
 }

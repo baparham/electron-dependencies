@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { downloadFile, getChromiumDepsFilename } from './download';
 
@@ -48,9 +48,11 @@ async function writeChromiumDepsFile(depsFilename: string, tag: string) {
 
 export async function getChromiumDependencyMap(tag: string): Promise<ChromiumDepsJson> {
   const tmpDir = getTmpDir();
-  const depsJsonFilename = join(tmpDir, `chromium-deps.json`);
-  const depsFilename = join(tmpDir, `chromium_deps.py`);
-  await writeChromiumDepsFile(depsFilename, tag);
-  dumpDepsToJson(tmpDir, depsFilename, depsJsonFilename);
+  const depsJsonFilename = join(tmpDir, `chromium-deps-${tag}.json`);
+  if (!existsSync(depsJsonFilename)) {
+    const depsFilename = join(tmpDir, `chromium_deps.py`);
+    await writeChromiumDepsFile(depsFilename, tag);
+    dumpDepsToJson(tmpDir, depsFilename, depsJsonFilename);
+  }
   return JSON.parse(readFileSync(depsJsonFilename).toString());
 }

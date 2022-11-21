@@ -15,5 +15,9 @@ describe('Component Data tests', () => {
     let expectedCompVersion = '06749a7a52305b11d6f6b578f3c3a2ea73d8129c';
     expect(await getComponentVersion(compWithShaVersioning, chromiumTag))
       .toEqual(expectedCompVersion);
+    const compWithRegularVersion = 'freetype';
+    expectedCompVersion = '2.12.1';
+    expect(await getComponentVersion(compWithRegularVersion, chromiumTag))
+      .toEqual(expectedCompVersion);
   });
 });

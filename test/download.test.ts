@@ -23,5 +23,5 @@ describe('Download tests', () => {
       'src/third_party/ffmpeg',
     ];
     expectAllStrings(expectedStrings, fileContent);
-  });
+  }, 30000);
 });

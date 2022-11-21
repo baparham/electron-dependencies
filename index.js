@@ -102,15 +102,6 @@ const chromiumComponents = {
   'opus': 'third_party/opus/README.chromium',
 };
 
-const nodeComps = {
-  'acorn': 'deps/acorn',
-  'brotli': 'deps/brotli',
-  'cares': 'deps/cares',
-  'icu-small': 'deps/icu-small',
-  'llhttp': 'deps/llhttp',
-  'nghttp2': 'deps/nghttp2',
-};
-
 let chromiumDependencyMap;
 let chromiumUrl;
 

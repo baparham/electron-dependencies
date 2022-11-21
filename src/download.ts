@@ -34,3 +34,27 @@ export function downloadFile(
   const localWriteStream = createWriteStream(localFile, fileOptions);
   return downloadToStream(remoteFile, localWriteStream);
 }
+
+export function downloadToString(fileUrl: string): Promise<string> {
+  const bufferArray: Array<Buffer> = [];
+  return new Promise((resolve, reject) => {
+    const options: RequestOptions = new URL(fileUrl);
+    if (process.env.https_proxy) {
+      const proxyAgent = new HttpsProxyAgent(process.env.https_proxy);
+      options.agent = proxyAgent;
+    }
+    const request = get(options, (response) => {
+      response.on('data', (chunk) => {
+        bufferArray.push(chunk);
+      });
+      response.on('error', reject);
+      response.on('end', () => resolve(Buffer.concat(bufferArray).toString('utf-8')));
+    });
+    request.on('error', reject);
+    request.end();
+  });
+}
+
+export function decodeBase64(input: string) {
+  return Buffer.from(input, 'base64').toString('utf-8');
+}
