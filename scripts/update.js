@@ -20,40 +20,29 @@ async function update() {
     return !existingElectronDependencies[h.version];
   });
 
-  const promises = [];
-
-  for (const version of newVersions) {
-    console.log('downloading', version.version);
-    try {
-      const deps = await getElectronDependencies(version.version);
-      existingElectronDependencies[version.version] = deps;
-    } catch (e) {
-      console.error('Error downloading', version.version);
-      console.error(e);
-      continue;
+  if (newVersions.length > 0) {
+    console.log('Found new versions of Electron:', newVersions.map(v => v.version).join(', '));
+    console.log('Downloading data for new versions...');
+    for (const version of newVersions) {
+      try {
+        const deps = await getElectronDependencies(version.version);
+        existingElectronDependencies[version.version] = deps;
+      } catch (e) {
+        console.error('Error downloading', version.version);
+        console.error(e);
+        continue;
+      }
     }
 
+    // sort existingElectronDependencies by key
+    const sorted = Object.keys(existingElectronDependencies).sort(semver.compare).reduce((acc, key) => {
+      acc[key] = existingElectronDependencies[key];
+      return acc;
+    }, {});
+
+    writeFileSync(join(__dirname, '../index.json'), JSON.stringify(sorted, null, 2));
+    console.log('Electron dependencies updated');
   }
-  // newVersions.forEach(async (v) => {
-  //   const deps = await getElectronDependencies(v.version));
-  // });
-
-  // Promise.allSettled(promises).then((results) => {
-  //   results.forEach((result) => {
-  //     if (result.status === 'fulfilled') {
-  //       const { value } = result;
-  //       existingElectronDependencies[value.version] = value;
-  //     }
-  //   });
-
-  // sort existingElectronDependencies by key
-  const sorted = Object.keys(existingElectronDependencies).sort(semver.compare).reduce((acc, key) => {
-    acc[key] = existingElectronDependencies[key];
-    return acc;
-  }, {});
-
-  writeFileSync(join(__dirname, '../index.json'), JSON.stringify(sorted, null, 2));
-  // });
 }
 
 // Download index.json from electron

@@ -125,8 +125,6 @@ const chromiumComponents = {
 let chromiumDependencyMap;
 let chromiumUrl;
 
-let dependencies = {};
-
 function debugLog(...msgs) {
   if (verbose) {
     console.log(...msgs);
@@ -361,7 +359,7 @@ function getYamlSummary(deps) {
   return retString;
 }
 
-function printSummary() {
+function printSummary(dependencies) {
   if (toYaml) {
     console.log(getYamlSummary(dependencies));
   } else {
@@ -391,7 +389,7 @@ function getPdfiumComponents(chromiumVersion) {
 async function downloadAndProcessDeps(release, force = false) {
   const chromiumVersion = getChromeVersion(release);
   chromiumUrl = `https://chromium.googlesource.com/chromium/src.git/+/refs/tags/${chromiumVersion}/`;
-  dependencies = {
+  const dependencies = {
     version: release.version,
     deps: {
       chromium: {
@@ -427,9 +425,7 @@ async function downloadAndProcessDeps(release, force = false) {
   const localDepsFilename = join(__dirname, '..', tempFolderName, chromePyFilename);
 
   if (!fs.existsSync(jsonDepFilename) || force) {
-    console.log(jsonDepFilename, 'does not exist, regenerating');
     if (!fs.existsSync(localDepsFilename) || force) {
-      console.log(localDepsFilename, 'does not exist, downloading');
       fs.writeFileSync(localDepsFilename, initialPyContent);
       await downloadFile(chromiumDepsFile, localDepsFilename, { flags: 'a' });
       // Append a new line to the file to flush the previous writes
@@ -528,11 +524,11 @@ async function main() {
 
   const release = getRelease(tag);
 
-  await downloadAndProcessDeps(release);
+  const dependencies = await downloadAndProcessDeps(release);
 
   debugLog(JSON.stringify(dependencies, null, 2));
 
-  printSummary();
+  printSummary(dependencies);
 }
 
 // only run main if this is not being imported
