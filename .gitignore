@@ -107,3 +107,4 @@ dist
 chromium_deps.json
 chromium_deps.py
 __pycache__
+tmp

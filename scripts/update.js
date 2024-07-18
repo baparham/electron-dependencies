@@ -1,10 +1,11 @@
-const { join } = require('path');
+const { mkdirSync, writeFileSync } = require('fs');
+const { dirname, join } = require('path');
 const semver = require('semver');
 const existingElectronDependencies = require('../index.json');
 const { downloadFile, getElectronDependencies } = require('./index.js');
 
 async function update() {
-  const electronHeaders = require('./index.json');
+  const electronHeaders = require('../tmp/index.json');
 
   // Identify all versions in index.json newer than 29.0.0
   const allSupportedVersions = electronHeaders.filter(h => {
@@ -45,12 +46,21 @@ async function update() {
   //     }
   //   });
 
-  require('fs').writeFileSync(join(__dirname, '../index.json'), JSON.stringify(existingElectronDependencies, null, 2));
+  // sort existingElectronDependencies by key
+  const sorted = Object.keys(existingElectronDependencies).sort(semver.compare).reduce((acc, key) => {
+    acc[key] = existingElectronDependencies[key];
+    return acc;
+  }, {});
+
+  writeFileSync(join(__dirname, '../index.json'), JSON.stringify(sorted, null, 2));
   // });
 }
 
 // Download index.json from electron
-downloadFile('https://electronjs.org/headers/index.json', join(__dirname, 'index.json'))
+const electronHeadersFile = join(__dirname, '..', 'tmp', 'index.json');
+mkdirSync(dirname(electronHeadersFile), { recursive: true });
+
+downloadFile('https://electronjs.org/headers/index.json', electronHeadersFile)
   .then(async (result) => {
     await update();
   });

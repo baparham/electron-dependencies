@@ -1,8 +1,7 @@
 const fs = require('fs');
 const https = require('https');
 const HttpsProxyAgent = require('https-proxy-agent');
-const electronHeaders = require('./index.json');
-const { basename, join } = require('path');
+const { join } = require('path');
 const url = require('url');
 const { spawnSync } = require('child_process');
 const nodeReleases = require('process-versions');
@@ -152,12 +151,14 @@ function getSanitizedVersion(version) {
 
 function getRelease(tag) {
   debugLog('Finding electron release with tag', `v${tag}`);
+  const electronHeaders = require('../tmp/index.json');
+
   const release = electronHeaders.find(r => r.version === getSanitizedVersion(tag))
   // const release = electronHeaders.find(release => release.tag_name === `v${tag}`);
 
   if (release === undefined) {
     console.error('Could not find electron release matching', tag);
-    console.error('please download a new version of https://electronjs.org/headers/index.json to', join(__dirname, './index.json'));
+    console.error('please download a new version of https://electronjs.org/headers/index.json to', join(__dirname, '..', 'tmp', './index.json'));
     process.exit(2);
   }
   return release;
@@ -387,7 +388,7 @@ function getPdfiumComponents(chromiumVersion) {
 }
 
 
-async function downloadAndProcessDeps(release) {
+async function downloadAndProcessDeps(release, force = false) {
   const chromiumVersion = getChromeVersion(release);
   chromiumUrl = `https://chromium.googlesource.com/chromium/src.git/+/refs/tags/${chromiumVersion}/`;
   dependencies = {
@@ -417,23 +418,31 @@ async function downloadAndProcessDeps(release) {
   const chromiumGitHubBaseUrl = `https://raw.githubusercontent.com/chromium/chromium/${chromiumVersion}/`;
   const chromiumDepsFile = `${chromiumGitHubBaseUrl}DEPS`;
 
+  const chromeJsonFilename = `chromium_deps_${chromiumVersion.replaceAll('.', '_')}.json`;
+  const tempFolderName = 'tmp';
+  const jsonDepFilename = join(__dirname, '..', tempFolderName, chromeJsonFilename);
+
   const chromePyFilename = `chromium_deps_${chromiumVersion.replaceAll('.', '_')}.py`;
   // download deps file and save to disk
-  const localDepsFilename = join(__dirname, chromePyFilename);
-  fs.writeFileSync(localDepsFilename, initialPyContent);
-  await downloadFile(chromiumDepsFile, localDepsFilename, { flags: 'a' });
+  const localDepsFilename = join(__dirname, '..', tempFolderName, chromePyFilename);
 
-  // Append a new line to the file to flush the previous writes
-  await fs.promises.appendFile(localDepsFilename, '\n');
+  if (!fs.existsSync(jsonDepFilename) || force) {
+    console.log(jsonDepFilename, 'does not exist, regenerating');
+    if (!fs.existsSync(localDepsFilename) || force) {
+      console.log(localDepsFilename, 'does not exist, downloading');
+      fs.writeFileSync(localDepsFilename, initialPyContent);
+      await downloadFile(chromiumDepsFile, localDepsFilename, { flags: 'a' });
+      // Append a new line to the file to flush the previous writes
+      await fs.promises.appendFile(localDepsFilename, '\n');
+    }
 
-  const chromeJsonFilename = `chromium_deps_${chromiumVersion.replaceAll('.', '_')}.json`;
-  const jsonDepFilename = join(__dirname, chromeJsonFilename);
-  const cmd = `python scripts/dump_deps.py "${chromePyFilename.replace('.py', '')}" "${jsonDepFilename}"`;
-  // use python script to dump to json
-  const proc = spawnSync(cmd, { shell: true });
-  if (proc.error) {
-    console.error(proc.output.toString());
-    process.exit(3);
+    const cmd = `python ${__dirname}/dump_deps.py "${localDepsFilename}" "${jsonDepFilename}"`;
+    // use python script to dump to json
+    const proc = spawnSync(cmd, { shell: true });
+    if (proc.error || proc.status !== 0) {
+      console.error(proc.output.toString());
+      process.exit(3);
+    }
   }
 
   // import json file here
