@@ -1,7 +1,7 @@
 # electron-dependencies
 Programmatically determines as many dependency versions as possible from Electron
 
-## Programatic Usage
+## Programmatic Usage
 ```javascript
 // Imports as a plain JSON object
 const electronDependencies = require('electron-dependencies');
