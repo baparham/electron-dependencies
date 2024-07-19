@@ -3,7 +3,10 @@
   "version": "0.5.0",
   "description": "Programmatically determines as many dependency versions as possible from Electron",
   "main": "index.json",
-  "repository": "https://github.com/baparham/electron-dependencies.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baparham/electron-dependencies.git"
+  },
   "author": "Brad Parham <baparham@gmail.com>",
   "license": "MIT",
   "scripts": {
