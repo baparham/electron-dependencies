@@ -1,0 +1,29 @@
+name: Update Electron Dependencies
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run every 12 hours
+    - cron:  '0 0/12 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: yarn install
+      - name: Publish from main if necessary
+        if: github.ref == 'refs/heads/main'
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          yarn build
+          yarn run release
