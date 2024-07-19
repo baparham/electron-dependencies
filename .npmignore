@@ -4,7 +4,7 @@ __pycache__
 .npmrc
 .yarn
 .yarnrc.yml
-scripts/__pycache__
+scripts
 tools
 test
 tmp
