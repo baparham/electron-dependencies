@@ -6,7 +6,8 @@ Programmatically determines as many dependency versions as possible from Electro
 // Imports as a plain JSON object
 const electronDependencies = require('electron-dependencies');
 const version = '29.0.0';
-const deps = electronDependencies[version];
+const dependencyGraph = electronDependencies[version];
+const deps = dependencyGraph.deps;
 
 const ffmpegVersion = deps.chromium.deps.ffmpeg.version
 const ffmpegUrl = deps.chromium.deps.ffmpeg.url
