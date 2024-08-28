@@ -401,12 +401,12 @@ async function downloadAndProcessDeps(release, force = false) {
         version: release.node,
         url: `https://github.com/nodejs/node/tree/v${release['node']}/deps`,
         deps: {
+          'openssl': release.openssl,
           ...nodeReleases[release.node],
           // Electron specific overrides deviating from upstream Node.js versions
           'v8': release.v8,
           'uv': release.uv,
           'zlib': release.zlib,
-          'openssl': release.openssl,
         },
       },
     },
