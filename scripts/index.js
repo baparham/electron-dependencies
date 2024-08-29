@@ -70,13 +70,6 @@ const componentRepos = {
     key: 'src/third_party/boringssl/src',
     useShaVersion: true,
   },
-  'fontconfig': {
-    key: 'src/third_party/fontconfig/src',
-    useShaVersion: false,
-    fileWithVersionData: 'README',
-    versionRegEx: semverPattern,
-    useRegExMatchNumber: 0,
-  },
   'libvpx': {
     key: 'src/third_party/libvpx/source/libvpx',
     useShaVersion: false,
@@ -112,6 +105,7 @@ const chromiumComponents = {
   'libxslt': 'third_party/libxslt/README.chromium',
   'libwebp': 'third_party/libwebp/README.chromium',
   'opus': 'third_party/opus/README.chromium',
+  'fontconfig': 'third_party/fontconfig/README.chromium',
   'glew': 'third_party/glfw/README.chromium',
   'jsoncpp': 'third_party/jsoncpp/README.chromium',
   'leveldb': 'third_party/leveldatabase/README.chromium',
