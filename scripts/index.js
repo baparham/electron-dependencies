@@ -118,6 +118,7 @@ const chromiumComponents = {
   'libaom': 'third_party/libaom/README.chromium',
   'libcxx': 'third_party/libc++/README.chromium',
   'libcxxabi': 'third_party/libc++abi/README.chromium',
+  'libusb': 'third_party/libusb/README.chromium',
   'ots': 'third_party/ots/README.chromium',
   're2': 'third_party/re2/README.chromium',
 };
