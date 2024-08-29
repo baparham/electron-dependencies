@@ -25,8 +25,8 @@ def Var(value):
 // source https://github.com/npm/node-semver/issues/32
 const semverPattern =
   /([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?/;
-// Matches non semver things like 69, 1728389, 1.my-release, 3, 2022, etc
-const lenientVersionPattern = /([\d]+(?:\.[a-zA-Z0-9-]+)?(?:\.[a-zA-Z0-9-]+\.?)?)/;
+// Matches semver and non semver things like 69, 1728389, 1.my-release, 3, 2022, 1.2.3.4, 1.2.3 etc
+const lenientVersionPattern = /([\d]+(?:\.[a-zA-Z0-9-]+)*)/;
 const shaPattern = /([A-Fa-f0-9]{40})/;
 
 const componentRepos = {
