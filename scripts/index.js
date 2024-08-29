@@ -112,6 +112,7 @@ const chromiumComponents = {
   'libaom': 'third_party/libaom/README.chromium',
   'libcxx': 'third_party/libc++/README.chromium',
   'libcxxabi': 'third_party/libc++abi/README.chromium',
+  'libpng': 'third_party/libpng/README.chromium',
   'libusb': 'third_party/libusb/README.chromium',
   'ots': 'third_party/ots/README.chromium',
   're2': 'third_party/re2/README.chromium',
@@ -374,7 +375,6 @@ function getPdfiumComponents(chromiumVersion) {
   }
   const pdfiumComps = {
     'libtiff': 'third_party/libtiff/README.pdfium',
-    'libpng16': 'third_party/libpng16/README.pdfium',
     ...libOpenJpeg,
   };
   return pdfiumComps;
