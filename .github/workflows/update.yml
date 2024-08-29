@@ -1,6 +1,13 @@
 name: Update Electron Dependencies
 
 on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run every 12 hours
+    - cron:  '0 0/12 * * *'
   workflow_dispatch:
 
 jobs:
