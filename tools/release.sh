@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-if [ "$(git status --porcelain)" = "" ]; then
+# ensure we ignore anything in .yarn since that may get updated simply by
+# running yarn install earlier
+if [ "$(git status --porcelain | grep -v ". .yarn/")" = "" ]; then
   echo "No new data, nothing to commit";
   exit;
 fi
@@ -16,7 +18,8 @@ git add index.json
 yarn version patch
 
 git add package.json
-git add .yarn
+# if we do end up having updated anything (e.g. process-versions) include .yarn
+git add .yarn yarn.lock
 
 VERSION=$(node -p -e "require('./package.json').version")
 
