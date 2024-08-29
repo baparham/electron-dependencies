@@ -16,6 +16,7 @@ git add index.json
 yarn version patch
 
 git add package.json
+git add .yarn
 
 VERSION=$(node -p -e "require('./package.json').version")
 
