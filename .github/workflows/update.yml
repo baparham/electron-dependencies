@@ -20,4 +20,5 @@ jobs:
         run: |
           yarn update
           yarn build
+          git status --porcelain
           yarn run release
