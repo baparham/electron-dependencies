@@ -1,6 +1,6 @@
 {
   "name": "electron-dependencies",
-  "version": "0.5.31",
+  "version": "0.5.32",
   "description": "Programmatically determines as many dependency versions as possible from Electron",
   "main": "index.json",
   "repository": {
