@@ -25,6 +25,7 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
+          set -x
           yarn update
           yarn build
           git status --porcelain
