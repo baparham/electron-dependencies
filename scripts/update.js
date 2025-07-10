@@ -50,6 +50,16 @@ const electronHeadersFile = join(__dirname, '..', 'tmp', 'index.json');
 mkdirSync(dirname(electronHeadersFile), { recursive: true });
 
 downloadFile('https://electronjs.org/headers/index.json', electronHeadersFile)
-  .then(async (result) => {
+  .then(async () => {
     await update();
+  })
+  .then(() => {
+    // Ensure the process exits once all updates are complete. GitHub actions
+    // have been hanging after "Electron dependencies updated" so explicitly
+    // terminate with success.
+    process.exit(0);
+  })
+  .catch(err => {
+    console.error(err);
+    process.exit(1);
   });
