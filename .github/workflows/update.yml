@@ -20,13 +20,17 @@ jobs:
         with:
           node-version: 20
       - run: yarn install
+      - name: Build and update dependencies
+        run: |
+          set -x
+          yarn update
+          yarn build
+          # Check if there are any changes to commit
+          git status --porcelain
       - name: Publish from main if necessary
         if: github.ref == 'refs/heads/main'
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           set -x
-          yarn update
-          yarn build
-          git status --porcelain
           yarn run release
