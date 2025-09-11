@@ -1474,7 +1474,7 @@ __metadata:
     jest: ^29.2.2
     js-yaml: ^4.1.0
     minimist: ^1.2.5
-    process-versions: ^0.3.76
+    process-versions: ^0.3.77
     semver: ^7.6.3
     ts-jest: ^29.0.3
     typescript: ^4.8.4
@@ -2991,10 +2991,10 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"process-versions@npm:^0.3.76":
-  version: 0.3.76
-  resolution: "process-versions@npm:0.3.76"
-  checksum: 691a3ca4955f781665f2e1346876db23466a8992e9192bfb5c9ac239b6e961a05fa2fbd18ced8963698e5c5083064fa05c52b28e6bb5f2032bc25a6098a2cac6
+"process-versions@npm:^0.3.77":
+  version: 0.3.77
+  resolution: "process-versions@npm:0.3.77"
+  checksum: f48724a0337a39bb9edc3078ecbc847cf30e6b6bf838a49bb80db017eddefed1572e94e75444fd7c1a89d473754b7e4b0687da9446c079d12a895606423a6189
   languageName: node
   linkType: hard
 
