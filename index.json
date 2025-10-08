@@ -52591,6 +52591,192 @@
       }
     }
   },
+  "36.9.4": {
+    "version": "36.9.4",
+    "deps": {
+      "chromium": {
+        "version": "136.0.7103.177",
+        "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/",
+        "deps": {
+          "freetype": {
+            "url": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git/+/82090e67c24259c343c83fd9cefe6ff0be7a7eca",
+            "version": "2.13.3",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git/+/82090e67c24259c343c83fd9cefe6ff0be7a7eca/README"
+          },
+          "ffmpeg": {
+            "url": "https://chromium.googlesource.com/chromium/third_party/ffmpeg.git/+/fbce2a76c00cd2e5aeffe3c2e71d44c284ec52d6",
+            "version": "7.1.git",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/third_party/ffmpeg.git/+/fbce2a76c00cd2e5aeffe3c2e71d44c284ec52d6/RELEASE"
+          },
+          "pdfium": {
+            "url": "https://pdfium.googlesource.com/pdfium.git/+/ca83e69429af8f0bfa34b22dc54f538b9eebf5c5",
+            "version": "ca83e69429af8f0bfa34b22dc54f538b9eebf5c5",
+            "deps": {
+              "libtiff": {
+                "url": "https://pdfium.googlesource.com/pdfium.git/+/ca83e69429af8f0bfa34b22dc54f538b9eebf5c5/third_party/libtiff/README.pdfium",
+                "version": "4.7.0",
+                "cpeVersion": "4.7.0"
+              },
+              "libopenjpeg": {
+                "url": "https://pdfium.googlesource.com/pdfium.git/+/ca83e69429af8f0bfa34b22dc54f538b9eebf5c5/third_party/libopenjpeg/README.pdfium",
+                "version": "2.5.3 (also update in opj_config*)",
+                "cpeVersion": "2.5.3"
+              }
+            }
+          },
+          "libsrtp": {
+            "url": "https://chromium.googlesource.com/chromium/deps/libsrtp.git/+/a52756acb1c5e133089c798736dd171567df11f5",
+            "version": "fd08747fa6800b321d53e15feb34da12dc697dee",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/deps/libsrtp.git/+/a52756acb1c5e133089c798736dd171567df11f5/LIBSRTP_VERSION"
+          },
+          "openh264": {
+            "url": "https://chromium.googlesource.com/external/github.com/cisco/openh264/+/652bdb7719f30b52b08e506645a7322ff1b2cc6f",
+            "version": "2.6.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/external/github.com/cisco/openh264/+/652bdb7719f30b52b08e506645a7322ff1b2cc6f/RELEASES"
+          },
+          "angle": {
+            "url": "https://chromium.googlesource.com/angle/angle.git/+/fa40b7c586fd2da9fd7e5c4d893ecb1334553b9e",
+            "version": "fa40b7c586fd2da9fd7e5c4d893ecb1334553b9e",
+            "deps": {}
+          },
+          "boringssl": {
+            "url": "https://boringssl.googlesource.com/boringssl.git/+/a9993612faac4866bc33ca8ff37bfd0659af1c48",
+            "version": "a9993612faac4866bc33ca8ff37bfd0659af1c48",
+            "deps": {}
+          },
+          "libvpx": {
+            "url": "https://chromium.googlesource.com/webm/libvpx.git/+/027bbee30a0103b99d86327b48d29567fed11688",
+            "version": "1.15.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/webm/libvpx.git/+/027bbee30a0103b99d86327b48d29567fed11688/CHANGELOG"
+          },
+          "sqlite": {
+            "url": "https://chromium.googlesource.com/chromium/deps/sqlite.git/+/8a22b25ad7244abaf07e372cc6dc97e041d663a9",
+            "version": "3.49.1",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/deps/sqlite.git/+/8a22b25ad7244abaf07e372cc6dc97e041d663a9/VERSION"
+          },
+          "wayland": {
+            "url": "https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland.git/+/a156431ea66fe67d69c9fbba8a8ad34dabbab81c",
+            "version": "1.23.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland.git/+/a156431ea66fe67d69c9fbba8a8ad34dabbab81c/meson.build"
+          },
+          "libjpeg-turbo": {
+            "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+/e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
+            "version": "3.1.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+/e14cbfaa85529d47f9f55b0f104a579c1061f9ad/README.chromium"
+          },
+          "libxml2": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libxml/README.chromium",
+            "version": "169857ad264e51d9b34d7119d2e2e006e35e60c2",
+            "cpeVersion": "2.14.0"
+          },
+          "libxslt": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libxslt/README.chromium",
+            "version": "c8b1ea4b89a9b81fa611f32c80f47df0c3b3b004",
+            "cpeVersion": "1.1.43"
+          },
+          "libwebp": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libwebp/README.chromium",
+            "version": "N/A",
+            "cpeVersion": "1.5.0"
+          },
+          "opus": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/opus/README.chromium",
+            "version": "8cf872a1"
+          },
+          "fontconfig": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/fontconfig/README.chromium",
+            "version": "14d466b30a8ab4a9d789977ed94f2c30e7209267",
+            "cpeVersion": "2.15.0"
+          },
+          "glew": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/glfw/README.chromium",
+            "version": "3.3-dev"
+          },
+          "jsoncpp": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/jsoncpp/README.chromium",
+            "version": "1.9.4",
+            "cpeVersion": "1.9.4"
+          },
+          "leveldb": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/leveldatabase/README.chromium",
+            "version": "1.23"
+          },
+          "libaom": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libaom/README.chromium",
+            "version": "N/A",
+            "cpeVersion": "3.12.0"
+          },
+          "libcxx": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libc++/README.chromium",
+            "version": "1.0"
+          },
+          "libcxxabi": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libc++abi/README.chromium",
+            "version": "1.0"
+          },
+          "libpng": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libpng/README.chromium",
+            "version": "1.6.43",
+            "cpeVersion": "1.6.43"
+          },
+          "libusb": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/libusb/README.chromium",
+            "version": "1.0.17",
+            "cpeVersion": "rc1"
+          },
+          "ots": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/ots/README.chromium",
+            "version": "46bea9879127d0ff1c6601b078e2ce98e83fcd33"
+          },
+          "re2": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/136.0.7103.177/third_party/re2/README.chromium",
+            "version": "1e44e72d31ddc66b783a545e9d9fcaa876a146b7"
+          }
+        }
+      },
+      "node": {
+        "version": "22.19.0",
+        "url": "https://github.com/nodejs/node/tree/v22.19.0/deps",
+        "deps": {
+          "openssl": "3.0.17",
+          "node": "22.19.0",
+          "acorn": "8.15.0",
+          "ada": "2.9.2",
+          "amaro": "1.1.0",
+          "ares": "1.34.5",
+          "brotli": "1.1.0",
+          "cjs_module_lexer": "2.1.0",
+          "cldr": "47.0",
+          "icu": "77.1",
+          "llhttp": "9.3.0",
+          "modules": "127",
+          "napi": "10",
+          "nbytes": "0.1.1",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.64.0",
+          "simdjson": "3.13.0",
+          "simdutf": "6.4.2",
+          "sqlite": "3.50.4",
+          "tz": "2025b",
+          "undici": "6.21.2",
+          "unicode": "16.0",
+          "uv": "1.51.0",
+          "uvwasi": "0.0.21",
+          "v8": "13.6.233.17-electron.0",
+          "zlib": "1.3.0.1-motley",
+          "zstd": "1.5.7"
+        }
+      }
+    }
+  },
   "37.0.0-alpha.1": {
     "version": "37.0.0-alpha.1",
     "deps": {
@@ -63583,6 +63769,193 @@
   },
   "38.2.1": {
     "version": "38.2.1",
+    "deps": {
+      "chromium": {
+        "version": "140.0.7339.133",
+        "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/",
+        "deps": {
+          "freetype": {
+            "url": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git/+/27c1cb10a52420515ce66729dfca897be21691b8",
+            "version": "2.13.3",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git/+/27c1cb10a52420515ce66729dfca897be21691b8/README"
+          },
+          "ffmpeg": {
+            "url": "https://chromium.googlesource.com/chromium/third_party/ffmpeg.git/+/d2d06b12c22d27af58114e779270521074ff1f85",
+            "version": "7.1.git",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/third_party/ffmpeg.git/+/d2d06b12c22d27af58114e779270521074ff1f85/RELEASE"
+          },
+          "pdfium": {
+            "url": "https://pdfium.googlesource.com/pdfium.git/+/1afaa1a380fcd06cec420f3e5b6ec1d2ccb920dc",
+            "version": "1afaa1a380fcd06cec420f3e5b6ec1d2ccb920dc",
+            "deps": {
+              "libtiff": {
+                "url": "https://pdfium.googlesource.com/pdfium.git/+/1afaa1a380fcd06cec420f3e5b6ec1d2ccb920dc/third_party/libtiff/README.pdfium",
+                "version": "4.7.0",
+                "cpeVersion": "4.7.0"
+              },
+              "libopenjpeg": {
+                "url": "https://pdfium.googlesource.com/pdfium.git/+/1afaa1a380fcd06cec420f3e5b6ec1d2ccb920dc/third_party/libopenjpeg/README.pdfium",
+                "version": "2.5.3 (also update in opj_config*)",
+                "cpeVersion": "2.5.3"
+              }
+            }
+          },
+          "libsrtp": {
+            "url": "https://chromium.googlesource.com/chromium/deps/libsrtp.git/+/a52756acb1c5e133089c798736dd171567df11f5",
+            "version": "fd08747fa6800b321d53e15feb34da12dc697dee",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/deps/libsrtp.git/+/a52756acb1c5e133089c798736dd171567df11f5/LIBSRTP_VERSION"
+          },
+          "openh264": {
+            "url": "https://chromium.googlesource.com/external/github.com/cisco/openh264/+/652bdb7719f30b52b08e506645a7322ff1b2cc6f",
+            "version": "2.6.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/external/github.com/cisco/openh264/+/652bdb7719f30b52b08e506645a7322ff1b2cc6f/RELEASES"
+          },
+          "angle": {
+            "url": "https://chromium.googlesource.com/angle/angle.git/+/a8c8a6febe630c6239a5e207530e9fac651ae373",
+            "version": "a8c8a6febe630c6239a5e207530e9fac651ae373",
+            "deps": {}
+          },
+          "boringssl": {
+            "url": "https://boringssl.googlesource.com/boringssl.git/+/0a0009998fa180695f3e2071805dc03c9a5f3124",
+            "version": "0a0009998fa180695f3e2071805dc03c9a5f3124",
+            "deps": {}
+          },
+          "libvpx": {
+            "url": "https://chromium.googlesource.com/webm/libvpx.git/+/a985e5e847a2fe69bef3e547cf25088132194e39",
+            "version": "1.15.2",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/webm/libvpx.git/+/a985e5e847a2fe69bef3e547cf25088132194e39/CHANGELOG"
+          },
+          "sqlite": {
+            "url": "https://chromium.googlesource.com/chromium/deps/sqlite.git/+/cc08c79629643fdd5b592f1391e738815f5577b6",
+            "version": "3.50.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/deps/sqlite.git/+/cc08c79629643fdd5b592f1391e738815f5577b6/VERSION"
+          },
+          "wayland": {
+            "url": "https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland.git/+/a156431ea66fe67d69c9fbba8a8ad34dabbab81c",
+            "version": "1.23.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland.git/+/a156431ea66fe67d69c9fbba8a8ad34dabbab81c/meson.build"
+          },
+          "libjpeg-turbo": {
+            "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+/e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
+            "version": "3.1.0",
+            "deps": {},
+            "versionFile": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+/e14cbfaa85529d47f9f55b0f104a579c1061f9ad/README.chromium"
+          },
+          "libxml2": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libxml/README.chromium",
+            "version": "2.14.2",
+            "cpeVersion": "2.14.2"
+          },
+          "libxslt": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libxslt/README.chromium",
+            "version": "c8b1ea4b89a9b81fa611f32c80f47df0c3b3b004",
+            "cpeVersion": "1.1.43"
+          },
+          "libwebp": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libwebp/README.chromium",
+            "version": "N/A",
+            "cpeVersion": "1.6.0"
+          },
+          "opus": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/opus/README.chromium",
+            "version": "55513e81",
+            "cpeVersion": "opus"
+          },
+          "fontconfig": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/fontconfig/README.chromium",
+            "version": "86b48ec01ece451d5270d0c5181a43151e45a042",
+            "cpeVersion": "2.17.1"
+          },
+          "glew": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/glfw/README.chromium",
+            "version": "3.3-dev"
+          },
+          "jsoncpp": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/jsoncpp/README.chromium",
+            "version": "1.9.4",
+            "cpeVersion": "1.9.4"
+          },
+          "leveldb": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/leveldatabase/README.chromium",
+            "version": "1.23"
+          },
+          "libaom": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libaom/README.chromium",
+            "version": "N/A",
+            "cpeVersion": "3.12.1"
+          },
+          "libcxx": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libc++/README.chromium",
+            "version": "1.0"
+          },
+          "libcxxabi": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libc++abi/README.chromium",
+            "version": "1.0"
+          },
+          "libpng": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libpng/README.chromium",
+            "version": "1.6.43",
+            "cpeVersion": "1.6.43"
+          },
+          "libusb": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/libusb/README.chromium",
+            "version": "1.0.17",
+            "cpeVersion": "rc1"
+          },
+          "ots": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/ots/README.chromium",
+            "version": "46bea9879127d0ff1c6601b078e2ce98e83fcd33"
+          },
+          "re2": {
+            "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/140.0.7339.133/third_party/re2/README.chromium",
+            "version": "1e44e72d31ddc66b783a545e9d9fcaa876a146b7"
+          }
+        }
+      },
+      "node": {
+        "version": "22.19.0",
+        "url": "https://github.com/nodejs/node/tree/v22.19.0/deps",
+        "deps": {
+          "openssl": "3.0.17",
+          "node": "22.19.0",
+          "acorn": "8.15.0",
+          "ada": "2.9.2",
+          "amaro": "1.1.0",
+          "ares": "1.34.5",
+          "brotli": "1.1.0",
+          "cjs_module_lexer": "2.1.0",
+          "cldr": "47.0",
+          "icu": "77.1",
+          "llhttp": "9.3.0",
+          "modules": "127",
+          "napi": "10",
+          "nbytes": "0.1.1",
+          "ncrypto": "0.0.1",
+          "nghttp2": "1.64.0",
+          "simdjson": "3.13.0",
+          "simdutf": "6.4.2",
+          "sqlite": "3.50.4",
+          "tz": "2025b",
+          "undici": "6.21.2",
+          "unicode": "16.0",
+          "uv": "1.51.0",
+          "uvwasi": "0.0.21",
+          "v8": "14.0.365.4-electron.0",
+          "zlib": "1.3.1",
+          "zstd": "1.5.7"
+        }
+      }
+    }
+  },
+  "38.2.2": {
+    "version": "38.2.2",
     "deps": {
       "chromium": {
         "version": "140.0.7339.133",
