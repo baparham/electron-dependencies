@@ -28,9 +28,7 @@ git commit -m "bump version to v${VERSION}"
 git tag v${VERSION}
 
 # Publish new version to NPM
-echo //registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN} > .npmrc
 npm publish --registry=https://registry.npmjs.org/
-rm -rf .npmrc
 
 # Push commit and tag to remote
 git push origin main --follow-tags
