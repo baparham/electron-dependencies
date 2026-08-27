@@ -28,6 +28,9 @@ const semverPattern =
 // Matches semver and non semver things like 69, 1728389, 1.my-release, 3, 2022, 1.2.3.4, 1.2.3 etc
 const lenientVersionPattern = /([\d]+(?:\.[a-zA-Z0-9-]+)*)/;
 const shaPattern = /([A-Fa-f0-9]{40})/;
+// Skia does not publish a semver style version, it uses a milestone number
+// declared in include/core/SkMilestone.h, e.g. `#define SK_MILESTONE 122`
+const skiaMilestonePattern = /#define\s+SK_MILESTONE\s+([\d]+)/;
 
 const componentRepos = {
   'freetype': {
@@ -97,6 +100,13 @@ const componentRepos = {
     fileWithVersionData: 'README.chromium',
     versionRegEx: lenientVersionPattern,
     useRegExMatchNumber: 0,
+  },
+  'skia': {
+    key: 'src/third_party/skia',
+    useShaVersion: false,
+    fileWithVersionData: 'include/core/SkMilestone.h',
+    versionRegEx: skiaMilestonePattern,
+    useRegExMatchNumber: 1,
   },
 };
 
