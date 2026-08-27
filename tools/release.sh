@@ -44,4 +44,5 @@ git tag v${VERSION}
 npm publish --registry=https://registry.npmjs.org/
 
 # Push commit and tag to remote
-git push origin main --follow-tags
+git push origin main
+git push origin v${VERSION}
