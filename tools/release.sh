@@ -4,6 +4,21 @@
 # running yarn install earlier
 UNCOMMITTED=$(git status --porcelain | grep -v ". .yarn/")
 
+# This repo did not tag releases historically, only committed "bump version to
+# vX.Y.Z" on each release. If we have no tags at all yet, retroactively create
+# one at the most recent such commit so future runs can diff against it
+# instead of always assuming index.json changed. This is self-healing and only
+# needs to run once.
+if [ -z "$(git tag --list)" ]; then
+  RETRO_COMMIT=$(git log --grep='^bump version to v' --format='%H' -1)
+  if [ -n "$RETRO_COMMIT" ]; then
+    RETRO_VERSION=$(git show "${RETRO_COMMIT}:package.json" | node -p -e "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+    echo "No tags found; retroactively tagging last release commit ${RETRO_COMMIT} as v${RETRO_VERSION}"
+    git tag "v${RETRO_VERSION}" "${RETRO_COMMIT}"
+    git push origin "v${RETRO_VERSION}"
+  fi
+fi
+
 # index.json may have been backfilled/updated in a commit that landed on main
 # since the last release, without leaving any uncommitted changes in this run.
 # Compare it against the last release tag to catch that case too.
