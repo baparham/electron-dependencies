@@ -107460,6 +107460,12 @@
             "deps": {},
             "versionFile": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+/640f254ad0fa03f6b1f29f89b7dd9366f2f6e533/README.chromium"
           },
+          "skia": {
+            "url": "https://skia.googlesource.com/skia.git/+/b6d106297ff9ef2ff8094033695d045e87775581",
+            "version": "152",
+            "deps": {},
+            "versionFile": "https://skia.googlesource.com/skia.git/+/b6d106297ff9ef2ff8094033695d045e87775581/include/core/SkMilestone.h"
+          },
           "libxml2": {
             "url": "https://chromium.googlesource.com/chromium/src.git/+/refs/tags/152.0.7977.54/third_party/libxml/README.chromium",
             "version": "962bd10d01151d29190567e2d15ccf641be55063",
