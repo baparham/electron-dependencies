@@ -38,10 +38,12 @@ VERSION=$(node -p -e "require('./package.json').version")
 
 # Commit and tag the repo
 git commit -m "bump version to v${VERSION}"
-git tag v${VERSION}
+# Use an annotated tag so the release is properly recorded on the remote
+git tag -a "v${VERSION}" -m "v${VERSION}"
 
 # Publish new version to NPM
 npm publish --registry=https://registry.npmjs.org/
 
-# Push commit and tag to remote
-git push origin main --follow-tags
+# Push commit and tag to remote, naming the tag explicitly so the release tag
+# always lands on the remote regardless of tag type
+git push origin main "v${VERSION}"
